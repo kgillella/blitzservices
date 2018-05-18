@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.css">
+  <link rel="stylesheet" 
+  href="https://gyrocode.github.io/jquery-datatables-alphabetSearch/1.2.2/css/dataTables.alphabetSearch.css">
+  
+
+
+<body>
+
+<div ng-app="trackerApp" ng-controller="componentCtrl"> 
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">SF Component Tracker</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Component List</a></li>
+    </ul>
+  </div>
+</nav>
+<table id="maindiv" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+                <th>Modified By</th>
+                <th>Modified Date</th>				
+            </tr>
+        </thead>
+    </table>
+
+<script>
+var app = angular.module('trackerApp', []);
+
+
+app.controller('componentCtrl', function($scope, $http) {
+
+  $http.get("http://localhost:4321/connect")
+  .then(function(response) {
+		$.ajax({
+			url: 'http://localhost:4321/more',
+			success : function(data, textStatus, jqXHR) {
+				var table_data = data.data
+				var table = $('#maindiv').DataTable( {
+					data: table_data,
+					dom: 'Alfrtip',
+					alphabetSearch: {
+						column: 2
+					},					
+					columns: [
+							{ data: 'fullName' },
+							{ data: 'type' },
+							{ data: 'createdByName' },
+							{ data: 'createdDate' },
+							{ data: 'lastModifiedByName' },
+							{ data: 'lastModifiedDate' }
+						]					
+		}); } })	  
+  });
+});
+</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js"></script>
+  <script src="https://gyrocode.github.io/jquery-datatables-alphabetSearch/1.2.2/js/dataTables.alphabetSearch.min.js"></script>
+
+</body>
+</html>
