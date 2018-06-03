@@ -10,6 +10,7 @@
   "author": "Sai Kumar",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "jsforce": "^1.8.1",
     "nforce": "^1.10.0",

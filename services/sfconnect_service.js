@@ -15,7 +15,7 @@ var org = nforce.createConnection({
 });*/
 var username = 'blitzappintegration@deloitte.com.blitzapp.lghexpdev';
 //var password = 'yourpassword+securitytoken';
-var password = "deloitte1234#"
+var password = "deloitte12345#"
 /*conn.login(username, password, function(err, userInfo) {
 if (err) { return console.error(err); }
 });*/
