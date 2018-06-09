@@ -175,6 +175,31 @@ module.exports.getAssignedCandidates= function(req,res){
 	})
 }
 
+module.exports.getPrevRoundFeedback = function(req,res){
+
+	/*Get the previous round feedback details from below query*/
+
+	const attendeeId = req.query.attendeeId;
+	const roundNum = req.query.round;
+	org.authenticate({ username:username, password:password}, function(err, resp){
+	  // the oauth object was stored in the connection object
+	  console.log('attendeeId: ' ,attendeeId);
+	  console.log('roundNum: ' ,roundNum);
+		const q = "Select Id, Blitz_Attendees__c, Capability_Panelist__c, Round__c, Desired_Position__c, Relevant_Months_of_Exp__c, Service_Skills__c, Service_Comments__c, Communication_Skills__c, Communication_Comments__c, Technical_Skills__c, Technical_Skills_Comments__c, Leadership_Skills_Evaluation__c, Management_Skills__c, Management_Comments__c, Interview_Recommendation__c, Overall_Comments__c from Candidate_Assesment__c where  Blitz_Attendees__c ='"+attendeeId+"' and Round__c ='"+roundNum+"'";
+	  	return org.query({ query: q }, function(err, resp){
+	  		if(err) {
+	  			res.status(500)
+	  			res.send({"message":"Some thing went wrong","error":err})
+	  		} else {
+				  console.log('res for assigned cand: ' ,resp);
+	  			res.status(200)
+	  			res.send({data:resp})
+	  		}
+		 	
+		})
+	})
+}
+
 module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 	  var email_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	  var email = req.params.emailid
