@@ -211,7 +211,7 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 	var securityToken = null
 	org.authenticate({ username:username, password:password}, function(err, resp){
 
-	  	var q = "Select Id, Name,Status__c,QR_Link__c,Upcoming_Blitz__c,Upcoming_Blitz__r.Name, Location__c,Upcoming_Blitz__r.Blitz_Planned_Date__c, Upcoming_Blitz__r.Service_Line__c, Upcoming_Blitz__r.Service_Line_Capability__c, Passkey__c from Capability_Personnel__c where Email__c = '"+email+"' AND Active__c = TRUE AND RecordTypeId = '012360000003Bkf'";
+	  	var q = "Select Id, Name,Status__c,QR_Link__c,Upcoming_Blitz__c,Upcoming_Blitz__r.Name, Location__c,Upcoming_Blitz__r.Blitz_Planned_Date__c, Upcoming_Blitz__r.Service_Line__c, Upcoming_Blitz__r.Service_Line_Capability__c, Passkey__c, Upcoming_Blitz__r.Blitz_Location__c from Capability_Personnel__c where Email__c = '"+email+"' AND Active__c = TRUE AND RecordTypeId = '012360000003Bkf'";
 	  	return org.query({ query: q }, function(err, resp){
 	  		if(err){
 	  			res.status(500)
@@ -221,7 +221,7 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 	  			var responseData = {"panalistdetails":resp}
 	  			var capPersonalId = responseData.panalistdetails.records['0']._fields.id
 	  			console.log("-------------id value is-----------",capPersonalId)
-			  	var q = "Select Blitz_Plan__c, Blitz_Plan__r.name,Capability_Personnel__r.Location__c,Blitz_Plan__r.Blitz_Planned_Date__c, Blitz_Plan__r.Service_Line__c, Blitz_Plan__r.Service_Line_Capability__c   from Blitz_Capability_Personnel__c where Capability_Personnel__c  = '"+capPersonalId+"'"
+			  	var q = "Select Blitz_Plan__c, Blitz_Plan__r.name,Capability_Personnel__r.Location__c,Blitz_Plan__r.Blitz_Planned_Date__c, Blitz_Plan__r.Service_Line__c, Blitz_Plan__r.Service_Line_Capability__c, Blitz_Plan__r.Blitz_Location__c from Blitz_Capability_Personnel__c where Capability_Personnel__c  = '"+capPersonalId+"'"
 			  	return org.query({ query: q }, function(err, resp){
 			  		if(err){
 			  			res.status(500)
