@@ -191,7 +191,7 @@ module.exports.getPrevRoundFeedback = function(req,res){
 	  			res.status(500)
 	  			res.send({"message":"Some thing went wrong","error":err})
 	  		} else {
-				  console.log('res for assigned cand: ' ,resp);
+				  console.log('res for assigned cand: ' ,resp.records[0]._fields);
 	  			res.status(200)
 	  			res.send({data:resp})
 	  		}
