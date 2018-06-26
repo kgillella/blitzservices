@@ -227,9 +227,57 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 			  			res.status(500)
 			  			res.send({"message":"Some thing went wrong","error":err})
 			  		}else{
-			  			res.status(200)
-			  			responseData.pastblitz = resp
-			  			res.send({data:responseData})
+						  res.status(200)
+						  responseData.pastblitz = resp
+						  let panelistDetailsData = responseData.panalistdetails.records[0]._fields;
+						//   console.log('response status: ' ,responseData.panalistdetails.records);
+						  let pastBlitzArr = [];
+						  responseData.pastblitz.records.map(pastblitzItem => {
+							//   let pastBlitzInfo = {
+							// 	blitzId: pastblitzItem.blitz_plan__c,
+							// 	name: pastblitzItem.blitz_plan__r.Name,
+							// 	plannedBlitzDate: ,
+							// 	serviceLine: ,
+							// 	serviceLineCapability: ,
+							// 	blitzLocation: ,
+							//   };
+							pastBlitzArr.push(pastblitzItem);
+						  });
+						  let panelistEmailObj = {  
+							"data":{  
+							   "panelistDetails":{  
+								//   "name":responseData.panalistdetails.records._fields.name,
+								  "status":panelistDetailsData.status__c,
+								  "location":panelistDetailsData.location__c,
+								  "passkey":panelistDetailsData.passkey__c,
+								  "id":panelistDetailsData.id
+							   },
+							   "upcomingBlitz":{  
+								  "totalSize":1,
+								  "records":[  
+									 {  
+										"attributes":{  
+										   "type": panelistDetailsData.upcoming_blitz__r.attributes.type,
+										   "url": panelistDetailsData.upcoming_blitz__r.attributes.url
+										},
+										"blitzId": panelistDetailsData.upcoming_blitz__c,
+										"name": panelistDetailsData.upcoming_blitz__r.Name,
+										"plannedBlitzDate": panelistDetailsData.upcoming_blitz__r.Blitz_Planned_Date__c,
+										"serviceLine":panelistDetailsData.upcoming_blitz__r.Service_Line__c,
+										"serviceLineCapability": panelistDetailsData.upcoming_blitz__r.Service_Line_Capability__c,
+										"blitzLocation": panelistDetailsData.upcoming_blitz__r.Blitz_Location__c,
+										"status":""
+									 }
+								  ]
+							   },
+							   "pastBlitz":{  
+								  "totalSize": responseData.pastblitz.totalSize,
+								  "records":pastBlitzArr
+							   }
+							}
+						 };
+						  console.log('response obj: ' ,panelistEmailObj);
+			  			res.send({data:panelistEmailObj})
 			  		}
 				})
 	  		}
