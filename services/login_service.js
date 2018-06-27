@@ -234,16 +234,16 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 						responseData.pastblitz.records.map(pastblitzItem => {
 						  pastBlitzArr.push(pastblitzItem);
 						});
-						const fieldValues = responseData.panalistdetails.records[0]._fields;
+						const fieldValues = responseData.panalistdetails.records[0]._fields ? responseData.panalistdetails.records[0]._fields : '';
 						let upcomingBlitzInfo = {
-							"upcomingblitzcode": fieldValues.upcoming_blitz__c,
-							"type": fieldValues.upcoming_blitz__r.attributes.type,
-							"url": fieldValues.upcoming_blitz__r.attributes.url,
-							"upcomingblitzname": fieldValues.upcoming_blitz__r.Name,
-							"upcomingblitzplanneddate": fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c,
-							"serviceline": fieldValues.upcoming_blitz__r.Service_Line__c,
-							"servicelinecapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
-							"upcomingblitzlocation": fieldValues.upcoming_blitz__r.Blitz_Location__c
+							"upcomingblitzcode": fieldValues.upcoming_blitz__c ? fieldValues.upcoming_blitz__c : '',
+							"type": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.attributes.type : '',
+							"url": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.attributes.url : '',
+							"upcomingblitzname": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Name : '',
+							"upcomingblitzplanneddate": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c : '',
+							"serviceline": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Service_Line__c : '',
+							"servicelinecapability": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Service_Line_Capability__c : '',
+							"upcomingblitzlocation": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Location__c : ''
 						};
 						let panelistEmailObj = {
 							 "panelistDetails": {
