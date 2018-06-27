@@ -207,85 +207,147 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 	if(!email_pattern.test(email)){
 		res.status(400);
 		res.send({message:"Please provide valid emailid"})
-	}else{
-	var securityToken = null
-	org.authenticate({ username:username, password:password}, function(err, resp){
+  	}else{
+  	var securityToken = null
+  	org.authenticate({ username:username, password:password}, function(err, resp){
 
-	  	var q = "Select Id, Name,Status__c,QR_Link__c,Upcoming_Blitz__c,Upcoming_Blitz__r.Name, Location__c,Upcoming_Blitz__r.Blitz_Planned_Date__c, Upcoming_Blitz__r.Service_Line__c, Upcoming_Blitz__r.Service_Line_Capability__c, Passkey__c, Upcoming_Blitz__r.Blitz_Location__c from Capability_Personnel__c where Email__c = '"+email+"' AND Active__c = TRUE AND RecordTypeId = '012360000003Bkf'";
-	  	return org.query({ query: q }, function(err, resp){
-	  		if(err){
-	  			res.status(500)
-	  			res.send({"message":"Some thing went wrong","error":err})
-	  		}else{
-	  			res.status(200)
-	  			var responseData = {"panalistdetails":resp}
-	  			var capPersonalId = responseData.panalistdetails.records['0']._fields.id
-	  			console.log("-------------id value is-----------",capPersonalId)
-			  	var q = "Select Blitz_Plan__c, Blitz_Plan__r.name,Capability_Personnel__r.Location__c,Blitz_Plan__r.Blitz_Planned_Date__c, Blitz_Plan__r.Service_Line__c, Blitz_Plan__r.Service_Line_Capability__c, Blitz_Plan__r.Blitz_Location__c from Blitz_Capability_Personnel__c where Capability_Personnel__c  = '"+capPersonalId+"'"
-			  	return org.query({ query: q }, function(err, resp){
-			  		if(err){
-			  			res.status(500)
-			  			res.send({"message":"Some thing went wrong","error":err})
-			  		}else{
-						  res.status(200)
-						  responseData.pastblitz = resp
-						  let panelistDetailsData = responseData.panalistdetails.records[0]._fields;
-						//   console.log('response status: ' ,responseData.panalistdetails.records);
-						  let pastBlitzArr = [], panelistdetailsArr = [];
-						  responseData.panalistdetails.records.map(panelistdetailsItem => {
-							  const fieldValues = panelistdetailsItem._fields;
-							  let pastBlitzInfo = 
-								{  
-									"attributes":{  
-									   "type": fieldValues.upcoming_blitz__r.attributes.type,
-									   "url": fieldValues.upcoming_blitz__r.attributes.url
-									},
-									"blitzId": fieldValues.upcoming_blitz__c,
-									"name": fieldValues.upcoming_blitz__r.Name,
-									"plannedBlitzDate": fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c,
-									"serviceLine": fieldValues.upcoming_blitz__r.Service_Line__c,
-									"serviceLineCapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
-									"blitzLocation": fieldValues.upcoming_blitz__r.Blitz_Location__c,
-									"status":panelistdetailsItem.status__c
-							  };
-							  panelistdetailsArr.push(pastBlitzInfo);
-						  });
-						  responseData.pastblitz.records.map(pastblitzItem => {
-							//   let pastBlitzInfo = {
-							// 	blitzId: pastblitzItem.blitz_plan__c,
-							// 	name: pastblitzItem.blitz_plan__r.Name,
-							// 	plannedBlitzDate: ,
-							// 	serviceLine: ,
-							// 	serviceLineCapability: ,
-							// 	blitzLocation: ,
-							//   };
-							pastBlitzArr.push(pastblitzItem);
-						  });
-						  let panelistEmailObj = {    
-							   "panelistDetails":{  
-								//   "name":responseData.panalistdetails.records._fields.name,
-								//   "status":panelistDetailsData.status__c,
-								"done": responseData.panalistdetails.done,
-								//   "passkey":panelistDetailsData.passkey__c,
-								//   "id":panelistDetailsData.id
-							   },
-							   "upcomingBlitz":{  
-								  "totalSize": responseData.panalistdetails.records.length,
-								  "records": panelistdetailsArr
-							   },
-							   "pastBlitz":{  
-								  "totalSize": responseData.pastblitz.totalSize,
-								  "records":pastBlitzArr
-							   }
-						 };
-						  console.log('response obj: ' ,panelistEmailObj);
-			  			res.send({data:panelistEmailObj})
-			  		}
-				})
-	  		}
-		});
+		var q = "Select Id, Name,Status__c,QR_Link__c,Upcoming_Blitz__c,Upcoming_Blitz__r.Name, Location__c,Upcoming_Blitz__r.Blitz_Planned_Date__c, Upcoming_Blitz__r.Service_Line__c, Upcoming_Blitz__r.Service_Line_Capability__c, Passkey__c, Upcoming_Blitz__r.Blitz_Location__c from Capability_Personnel__c where Email__c = '"+email+"' AND Active__c = TRUE AND RecordTypeId = '012360000003Bkf'";
+		return org.query({ query: q }, function(err, resp){
+			if(err){
+				res.status(500)
+				res.send({"message":"Some thing went wrong","error":err})
+			}else{
+				res.status(200)
+				var responseData = {"panalistdetails":resp}
+				var capPersonalId = responseData.panalistdetails.records['0']._fields.id
+				console.log("-------------id value is-----------",capPersonalId)
+				var q = "Select Blitz_Plan__c, Blitz_Plan__r.name,Capability_Personnel__r.Location__c,Blitz_Plan__r.Blitz_Planned_Date__c, Blitz_Plan__r.Service_Line__c, Blitz_Plan__r.Service_Line_Capability__c, Blitz_Plan__r.Blitz_Location__c from Blitz_Capability_Personnel__c where Capability_Personnel__c  = '"+capPersonalId+"'"
+				return org.query({ query: q }, function(err, resp){
+					if(err){
+						res.status(500)
+						res.send({"message":"Some thing went wrong","error":err})
+					}else{
+						res.status(200)
+						responseData.pastblitz = resp
+						let panelistDetailsData = responseData.panalistdetails.records[0]._fields;
+					  //   console.log('response status: ' ,responseData.panalistdetails.records);
+						let pastBlitzArr = [], panelistdetailsArr = [];
+						responseData.panalistdetails.records.map(panelistdetailsItem => {
+							const fieldValues = panelistdetailsItem._fields;
+							let pastBlitzInfo = 
+							  {  
+								  "attributes":{  
+									 "type": fieldValues.upcoming_blitz__r.attributes.type,
+									 "url": fieldValues.upcoming_blitz__r.attributes.url
+								  },
+								  "blitzId": fieldValues.upcoming_blitz__c,
+								  "name": fieldValues.upcoming_blitz__r.Name,
+								  "plannedBlitzDate": fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c,
+								  "serviceLine": fieldValues.upcoming_blitz__r.Service_Line__c,
+								  "serviceLineCapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
+								  "blitzLocation": fieldValues.upcoming_blitz__r.Blitz_Location__c,
+								  "status":panelistdetailsItem.status__c
+							};
+							panelistdetailsArr.push(pastBlitzInfo);
+						});
+						responseData.pastblitz.records.map(pastblitzItem => {
+						  //   let pastBlitzInfo = {
+						  // 	blitzId: pastblitzItem.blitz_plan__c,
+						  // 	name: pastblitzItem.blitz_plan__r.Name,
+						  // 	plannedBlitzDate: ,
+						  // 	serviceLine: ,
+						  // 	serviceLineCapability: ,
+						  // 	blitzLocation: ,
+						  //   };
+						  pastBlitzArr.push(pastblitzItem);
+						});
+						let panelistEmailObj = {    
+							 "panelistDetails":{  
+							  //   "name":responseData.panalistdetails.records._fields.name,
+							  //   "status":panelistDetailsData.status__c,
+							  "done": responseData.panalistdetails.done,
+							  //   "passkey":panelistDetailsData.passkey__c,
+							  //   "id":panelistDetailsData.id
+							 },
+							 "upcomingBlitz":{  
+								"totalSize": responseData.panalistdetails.records.length,
+								"records": panelistdetailsArr
+							 },
+							 "pastBlitz":{  
+								"totalSize": responseData.pastblitz.totalSize,
+								"records":pastBlitzArr
+							 }
+					   };
+						console.log('response obj: ' ,panelistEmailObj);
+						res.send({data:panelistEmailObj})
+					}
+			  })
+			}
+	  });
+
+  })
+	  
+}
+}
+
+/* Post call for Assesment Submission */
+module.exports.submitAssesment= function(req,res){
+
+	/*Update the blitz plans details
+		content-type:application/json
+		body:
+		{
+			"blitzPlanId":"11212",
+			"status":"Available"	
+		}
+
+	*/
+	let reqObj = req.body;
+	var assesmentObj = {
+		"Blitz_Attendees__c": reqObj.blitzId,
+		"Capability_Panelist__c": reqObj.panelistId,
+		"Round__c": reqObj.roundNum,
+		"Desired_Position__c": reqObj.desiredPos,
+		"Relevant_Months_of_Exp__c": reqObj.relMonthsExp,
+		"Service_Skills__c": reqObj.serviceSkills,
+		"Service_Comments__c": reqObj.serviceComments,
+		"Communication_Skills__c": reqObj.commSkills,
+		"Communication_Comments__c": reqObj.commcommnets,
+		"Technical_Skills__c": reqObj.techSkills,
+		"Technical_Skills_Comments__c": reqObj.techSkillsComments,
+		"Leadership_Skills_Evaluation__c": reqObj.leadSkillsEval,
+		"Management_Skills__c": reqObj.managementSkills,
+		"Management_Comments__c": reqObj.managementComments,
+		"Interview_Recommendation__c": reqObj.interviewRecom,
+		"Overall_Comments__c": reqObj.overallComments,
+	};
+	org.authenticate({ username:username, password:password}, function(err, resp){
+	  // the oauth object was stored in the connection object
+	  console.log('req: ' ,req.body);
+		// org.insert({ sobject: assesmentObj }, function(err, resp) {
+		// 	console.log('inside insert fn');
+		// });
+	//   var q = "Select Id, Status__c from Capability_Personnel__c where id  = '"+blitzPlanId+"'"
+
+	// 	return org.query({ query: q }, function(err, resp){
+		  
+	// 	  if(!err && resp.records) {
+	// 	    var acc = resp.records[0];
+	// 	    acc.set('Status__c', status);
+		 
+	// 	    org.update({ sobject: acc }, function(err, resp){
+	// 	      if(!err){
+	// 	      	  res.status(200)
+	// 		      res.send({"message":"Update was done","Success":true,"response":resp,"update":"DOne"})
+	// 	      } else{
+	//   			res.status(500)
+	//   			res.send({"message":"Some thing went wrong","error":err})
+
+	// 	      }
+	// 	    });
+		 
+	// 	  }
+	// 	});
 
 	})
-		
-}
 }
