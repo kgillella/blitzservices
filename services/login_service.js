@@ -246,7 +246,7 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 								  "serviceLine": fieldValues.upcoming_blitz__r.Service_Line__c,
 								  "serviceLineCapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
 								  "blitzLocation": fieldValues.upcoming_blitz__r.Blitz_Location__c,
-								  "status":panelistdetailsItem.status__c
+								  "status": fieldValues.status__c
 							};
 							panelistdetailsArr.push(pastBlitzInfo);
 						});
