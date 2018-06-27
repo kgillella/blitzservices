@@ -229,56 +229,39 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 					}else{
 						res.status(200)
 						responseData.pastblitz = resp
-						let panelistDetailsData = responseData.panalistdetails.records[0]._fields;
-					  //   console.log('response status: ' ,responseData.panalistdetails.records);
-						let pastBlitzArr = [], panelistdetailsArr = [];
-						responseData.panalistdetails.records.map(panelistdetailsItem => {
-							const fieldValues = panelistdetailsItem._fields;
-							let pastBlitzInfo = 
-							  {  
-								  "attributes":{  
-									 "type": fieldValues.upcoming_blitz__r.attributes.type,
-									 "url": fieldValues.upcoming_blitz__r.attributes.url
-								  },
-								  "blitzId": fieldValues.upcoming_blitz__c,
-								  "name": fieldValues.upcoming_blitz__r.Name,
-								  "plannedBlitzDate": fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c,
-								  "serviceLine": fieldValues.upcoming_blitz__r.Service_Line__c,
-								  "serviceLineCapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
-								  "blitzLocation": fieldValues.upcoming_blitz__r.Blitz_Location__c,
-								  "status": fieldValues.status__c
-							};
-							panelistdetailsArr.push(pastBlitzInfo);
-						});
+						// let upcomingBlitzInfo = responseData.panalistdetails.records[0]._fields;
+						let pastBlitzArr = [];
 						responseData.pastblitz.records.map(pastblitzItem => {
-						  //   let pastBlitzInfo = {
-						  // 	blitzId: pastblitzItem.blitz_plan__c,
-						  // 	name: pastblitzItem.blitz_plan__r.Name,
-						  // 	plannedBlitzDate: ,
-						  // 	serviceLine: ,
-						  // 	serviceLineCapability: ,
-						  // 	blitzLocation: ,
-						  //   };
 						  pastBlitzArr.push(pastblitzItem);
 						});
-						let panelistEmailObj = {    
-							 "panelistDetails":{  
-							  //   "name":responseData.panalistdetails.records._fields.name,
-							  //   "status":panelistDetailsData.status__c,
-							  "done": responseData.panalistdetails.done,
-							  //   "passkey":panelistDetailsData.passkey__c,
-							  //   "id":panelistDetailsData.id
+						const fieldValues = responseData.panalistdetails.records[0]._fields;
+						let upcomingBlitzInfo = {
+							"upcomingblitzcode": fieldValues.upcoming_blitz__c,
+							"type": fieldValues.upcoming_blitz__r.attributes.type,
+							"url": fieldValues.upcoming_blitz__r.attributes.url,
+							"upcomingblitzname": fieldValues.upcoming_blitz__r.Name,
+							"upcomingblitzplanneddate": fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c,
+							"serviceline": fieldValues.upcoming_blitz__r.Service_Line__c,
+							"servicelinecapability": fieldValues.upcoming_blitz__r.Service_Line_Capability__c,
+							"upcomingblitzlocation": fieldValues.upcoming_blitz__r.Blitz_Location__c
+						};
+						let panelistEmailObj = {
+							 "panelistDetails": {
+							    "name": fieldValues.name,
+							    "status": fieldValues.status__c,
+							  	"totalSize": responseData.panalistdetails.totalSize,
+							  	"done": responseData.panalistdetails.done,
+							    "passkey": fieldValues.passkey__c,
+								"id": fieldValues.id,
+								"qrlink": fieldValues.qr_link__c
 							 },
-							 "upcomingBlitz":{  
-								"totalSize": responseData.panalistdetails.records.length,
-								"records": panelistdetailsArr
-							 },
+							 "upcomingBlitz": upcomingBlitzInfo,
 							 "pastBlitz":{  
 								"totalSize": responseData.pastblitz.totalSize,
 								"records":pastBlitzArr
 							 }
 					   };
-						console.log('response obj: ' ,panelistEmailObj);
+						console.log('response pastblitz: ' ,panelistEmailObj);
 						res.send({data:panelistEmailObj})
 					}
 			  })
