@@ -232,7 +232,21 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 						// let upcomingBlitzInfo = responseData.panalistdetails.records[0]._fields;
 						let pastBlitzArr = [];
 						responseData.pastblitz.records.map(pastblitzItem => {
-						  pastBlitzArr.push(pastblitzItem);
+							pastblitzItem = pastblitzItem._fields;
+							let pastblitzObj = {
+								"pastblitzid": pastblitzItem.blitz_plan__c ? pastblitzItem.blitz_plan__c : '',
+								"pastblitztype": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.type : '',
+								"pastblitzurl": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.url : '',
+								"pastblitzname": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Name : '',
+								"pastblitzdate": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Planned_Date__c : '',
+								"pastblitzserviceline": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line__c : '',
+								"pastblitzcapability": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line_Capability__c : '',
+								"pastblitzlocation": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Location__c: '',
+								"pastblitzcapabilitytype": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.type : '',
+								"pastblitzcapabilityurl": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.url : '',
+								"pastblitzcapabilitylocation": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.Location__c : ''
+							};
+						  pastBlitzArr.push(pastblitzObj);
 						});
 						const fieldValues = responseData.panalistdetails.records[0]._fields ? responseData.panalistdetails.records[0]._fields : '';
 						let upcomingBlitzInfo = {
