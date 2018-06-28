@@ -234,31 +234,31 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 						responseData.pastblitz.records.map(pastblitzItem => {
 							pastblitzItem = pastblitzItem._fields;
 							let pastblitzObj = {
-								"pastblitzid": pastblitzItem.blitz_plan__c ? pastblitzItem.blitz_plan__c : '',
-								"pastblitztype": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.type : '',
-								"pastblitzurl": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.url : '',
-								"pastblitzname": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Name : '',
-								"pastblitzdate": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Planned_Date__c : '',
-								"pastblitzserviceline": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line__c : '',
-								"pastblitzcapability": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line_Capability__c : '',
-								"pastblitzlocation": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Location__c: '',
-								"pastblitzcapabilitytype": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.type : '',
-								"pastblitzcapabilityurl": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.url : '',
-								"pastblitzcapabilitylocation": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.Location__c : ''
+								"blitzid": pastblitzItem.blitz_plan__c ? pastblitzItem.blitz_plan__c : '',
+								"blitztype": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.type : '',
+								"blitzurl": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.attributes.url : '',
+								"blitzname": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Name : '',
+								"blitzdate": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Planned_Date__c : '',
+								"blitzserviceline": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line__c : '',
+								"blitzcapability": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Service_Line_Capability__c : '',
+								"blitzlocation": pastblitzItem.blitz_plan__r ? pastblitzItem.blitz_plan__r.Blitz_Location__c: '',
+								"blitzcapabilitytype": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.type : '',
+								"blitzcapabilityurl": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.attributes.url : '',
+								"blitzcapabilitylocation": pastblitzItem.capability_personnel__r ? pastblitzItem.capability_personnel__r.Location__c : ''
 							};
 						  pastBlitzArr.push(pastblitzObj);
 						});
 						const fieldValues = responseData.panalistdetails.records[0]._fields ? responseData.panalistdetails.records[0]._fields : '';
-						let upcomingBlitzInfo = {
-							"upcomingblitzcode": fieldValues.upcoming_blitz__c ? fieldValues.upcoming_blitz__c : '',
+						let upcomingBlitzInfo = [{
+							"blitzcode": fieldValues.upcoming_blitz__c ? fieldValues.upcoming_blitz__c : '',
 							"type": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.attributes.type : '',
 							"url": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.attributes.url : '',
-							"upcomingblitzname": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Name : '',
-							"upcomingblitzplanneddate": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c : '',
+							"blitzname": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Name : '',
+							"blitzplanneddate": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Planned_Date__c : '',
 							"serviceline": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Service_Line__c : '',
 							"servicelinecapability": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Service_Line_Capability__c : '',
-							"upcomingblitzlocation": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Location__c : ''
-						};
+							"blitzlocation": fieldValues.upcoming_blitz__r ? fieldValues.upcoming_blitz__r.Blitz_Location__c : ''
+						}];
 						let panelistEmailObj = {
 							 "panelistDetails": {
 							    "name": fieldValues.name,
