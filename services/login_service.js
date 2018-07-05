@@ -157,8 +157,8 @@ module.exports.getAssignedCandidates= function(req,res){
 	// const panelistId = req.body.panelistId;
 	org.authenticate({ username:username, password:password}, function(err, resp){
 	  // the oauth object was stored in the connection object
-	  console.log('blitzPlanId: ' ,blitzPlanId);
-	  console.log('panelistId: ' ,panelistId);
+	//   console.log('blitzPlanId: ' ,blitzPlanId);
+	//   console.log('panelistId: ' ,panelistId);
 		  // var q = "Select Id,  Name, Blitz_Planned_Date__c, Blitz_Location__c, Service_Line__c, Service_Line_Capability__c, Blitz_Panelist_Location__c, Telephonic_Locations__c from Blitz_Plan__c where Id   = '"+blitzPlanId+"'";
 		const q = "Select Id, Candidate__r.First_Name__c, Candidate__r.Last_Name__c, Candidate__r.Phone__c, Candidate__r.Email__c , Candidate__r.Capability__c, Candidate__r.Source__c, Versant_Status__c, Stage__c, Candidate__r.Blitz_Date__c from Blitz_Attendees__c where Blitz_Plan__c ='"+blitzPlanId+"' AND ((Status__c ='Candidate Arrived' AND Capability_Panelist_Round_1__c ='"+panelistId+"') OR (Status__c ='Technical Interview-I completed' AND Capability_Panelist_Round_2__c ='"+panelistId+"') OR (Status__c ='Technical Interview-II completed' AND Capability_Panelists_Round_3__c ='"+panelistId+"')) ORDER BY Lastmodifieddate DESC LIMIT 1";  
 	  	return org.query({ query: q }, function(err, resp){
@@ -166,9 +166,38 @@ module.exports.getAssignedCandidates= function(req,res){
 	  			res.status(500)
 	  			res.send({"message":"Some thing went wrong","error":err})
 	  		}else{
-				  console.log('res for assigned cand: ' ,resp);
-	  			res.status(200)
-	  			res.send({data:resp})
+				//   console.log('res for assigned cand: ' ,resp.records[0]._fields.candidate__r);
+				  res.status(200)
+				  const responseData = resp.records;
+				  let cadidatesListArr = [];
+				  responseData.map((candidateItem, i) => {
+					  const candidateDetail = {
+						  "blitzType": candidateItem.attributes.type,
+						  "blitzUrl": candidateItem.attributes.url,
+						  "changedState": candidateItem._changed,
+						  "PreviousState": candidateItem._previous,
+						  "candidateId": candidateItem._fields.id,
+						  "candidateType": candidateItem._fields.candidate__r.attributes.type,
+						  "candidateUrl": candidateItem._fields.candidate__r.attributes.url,
+						  "candidateFirstName": candidateItem._fields.candidate__r.First_Name__c,
+						  "candidateLastName": candidateItem._fields.candidate__r.Last_Name__c,
+						  "candidatePhoneNum": candidateItem._fields.candidate__r.Phone__c,
+						  "candidateEmail": candidateItem._fields.candidate__r.Email__c,
+						  "candidateCapability": candidateItem._fields.candidate__r.Capability__c,
+						  "candidateSource": candidateItem._fields.candidate__r.Source__c,
+						  "candidateBlitzDate": candidateItem._fields.candidate__r.Blitz_Date__c,
+						  "candidateVersantStatus": candidateItem._fields.versant_status__c,
+						  "candidateId": candidateItem._fields.stage__c
+					  };
+					cadidatesListArr.push(candidateDetail);
+				  });
+				  const candidatesList = {
+					"totalSize": resp.totalSize,
+					"done": resp.done,
+					"cadidatesList": cadidatesListArr.length ? cadidatesListArr : []
+				  }
+				  console.log('candidatesList: ' ,candidatesList);
+	  			res.send({data:candidatesList})
 	  		}
 		 	
 		})
