@@ -196,7 +196,6 @@ module.exports.getAssignedCandidates= function(req,res){
 					"done": resp.done,
 					"cadidatesList": cadidatesListArr.length ? cadidatesListArr : []
 				  }
-				  console.log('candidatesList: ' ,candidatesList);
 	  			res.send({data:candidatesList})
 	  		}
 		 	
@@ -220,9 +219,38 @@ module.exports.getPrevRoundFeedback = function(req,res){
 	  			res.status(500)
 	  			res.send({"message":"Some thing went wrong","error":err})
 	  		} else {
-				  console.log('res for assigned cand: ' ,resp.records[0]._fields);
+				//   console.log('res for assigned cand: ' ,resp.records[0]._fields);
+				  let candidateFeedbackArr = [];
+				  resp.records.map(feedbackItem => {
+					feedbackItem = feedbackItem._fields;
+					  feedbackInfo = {
+						"id": feedbackItem.id,
+						"blitzAttendees": feedbackItem.blitz_attendees__c,
+						"capabilityPanelist": feedbackItem.capability_panelist__c,
+						"roundNum": feedbackItem.round__c,
+						"desiredPosition": feedbackItem.desired_position__c,
+						"relevantMonthsExp": feedbackItem.relevant_months_of_exp__c,
+						"serviceSkills": feedbackItem.service_skills__c,
+						"serviceComments": feedbackItem.service_comments__c,
+						"communicationSkills": feedbackItem.communication_skills__c,
+						"communicationComments": feedbackItem.communication_comments__c,
+						"technicalSkills": feedbackItem.technical_skills__c,
+						"technicalskillsComments": feedbackItem.technical_skills_comments__c,
+						"leadershipSkillsEval": feedbackItem.leadership_skills_evaluation__c,
+						"managementSkills": feedbackItem.management_skills__c,
+						"managementComments": feedbackItem.management_comments__c,
+						"interviewRecommendation": feedbackItem.interview_recommendation__c,
+						"overallComments": feedbackItem.overall_comments__c
+					  }
+					candidateFeedbackArr.push(feedbackInfo)
+				  });
+				  const feedbackResponse = {
+					  "totalSize": resp.totalSize,
+					  "done": resp.done,
+					  "feedbackDetail": candidateFeedbackArr
+				  };
 	  			res.status(200)
-	  			res.send({data:resp})
+	  			res.send({data:feedbackResponse})
 	  		}
 		 	
 		})
