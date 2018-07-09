@@ -97,8 +97,32 @@ module.exports.checkBlitzPlanDetails= function(req,res){
 	  			res.status(500)
 	  			res.send({"message":"Some thing went wrong","error":err})
 	  		}else{
-	  			res.status(200)
-	  			res.send({data:resp})
+				  res.status(200)
+				  let planDetailArr = [];
+				  resp.records.map((planDetailItem, i) => {
+					  const planDetailObj = {
+						"blitzPlanId": planDetailItem._fields.id,
+						"blitzPlanName": planDetailItem._fields.name,
+						"blitzPlanType": planDetailItem.attributes.type,
+						"blitzPlanUrl": planDetailItem.attributes.url,
+						"blitzPlannedDate": planDetailItem._fields.blitz_planned_date__c,
+						"blitzLocation": planDetailItem._fields.blitz_location__c,
+						"serviceLine": planDetailItem._fields.service_line__c,
+						"serviceLineCapability": planDetailItem._fields.service_line_capability__c,
+						"blitzPanelistLocation": planDetailItem._fields.blitz_panelist_location__c,
+						"telephonicLocations": planDetailItem._fields.telephonic_locations__c,
+						"blitzChanged": planDetailItem._changed,
+						"blitzPrevious": planDetailItem._previous
+					  };
+					planDetailArr.push(planDetailObj);
+				  });
+				  const planDetailData = {
+					"totalSize": resp.totalSize,
+					"done": resp.done,
+					"planDetailsList": planDetailArr
+				  };
+				  console.log('planDetail: ' ,planDetailData);
+	  			res.send({data:planDetailData})
 	  		}
 		 	
 		})
