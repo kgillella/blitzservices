@@ -371,61 +371,60 @@ module.exports.checkPanelistEmailWithPastBlitz = function(req,res){
 /* Post call for Assesment Submission */
 module.exports.submitAssesment= function(req,res){
 
-	/*Update the blitz plans details
-		content-type:application/json
-		body:
-		{
-			"blitzPlanId":"11212",
-			"status":"Available"	
-		}
+	var reqObj = req.body;
+	// Test payload object for post submitAssesment API
+	// {
+	// 	"blitzId": "a071F000000UHTyQAO",
+	// 	"panelistId": "a0H1F000001Y7vQUAS",
+	// 	"roundNum": "Round 1",
+	// 	"desiredPos": "BTA",
+	// 	"relMonthsExp": "2 years",
+	// 	"serviceSkills": "Strong Evidence Competency is Present",
+	// 	"serviceComments": "Service Comments1",
+	// 	"commSkills": "Strong Evidence Competency is NOT Present",
+	// 	"commcommnets": "Comm comments",
+	// 	"techSkills": "Strong Evidence Competency is Present",
+	// 	"techSkillsComments": "TechSkills Comments",
+	// 	"leadSkillsEval": "Strong Evidence Competency is Present",
+	// 	"managementSkills": "Strong Evidence Competency is Present",
+	// 	"managementComments": "Management Comments",
+	// 	"interviewRecom": "Proceed to Next Round",
+	// 	"overallComments": "Overall Comments"
+	// }
 
-	*/
-	let reqObj = req.body;
-	var assesmentObj = {
-		"Blitz_Attendees__c": reqObj.blitzId,
-		"Capability_Panelist__c": reqObj.panelistId,
-		"Round__c": reqObj.roundNum,
-		"Desired_Position__c": reqObj.desiredPos,
-		"Relevant_Months_of_Exp__c": reqObj.relMonthsExp,
-		"Service_Skills__c": reqObj.serviceSkills,
-		"Service_Comments__c": reqObj.serviceComments,
-		"Communication_Skills__c": reqObj.commSkills,
-		"Communication_Comments__c": reqObj.commcommnets,
-		"Technical_Skills__c": reqObj.techSkills,
-		"Technical_Skills_Comments__c": reqObj.techSkillsComments,
-		"Leadership_Skills_Evaluation__c": reqObj.leadSkillsEval,
-		"Management_Skills__c": reqObj.managementSkills,
-		"Management_Comments__c": reqObj.managementComments,
-		"Interview_Recommendation__c": reqObj.interviewRecom,
-		"Overall_Comments__c": reqObj.overallComments,
-	};
 	org.authenticate({ username:username, password:password}, function(err, resp){
-	  // the oauth object was stored in the connection object
-	  console.log('req: ' ,req.body);
-		// org.insert({ sobject: assesmentObj }, function(err, resp) {
-		// 	console.log('inside insert fn');
-		// });
-	//   var q = "Select Id, Status__c from Capability_Personnel__c where id  = '"+blitzPlanId+"'"
-
-	// 	return org.query({ query: q }, function(err, resp){
-		  
-	// 	  if(!err && resp.records) {
-	// 	    var acc = resp.records[0];
-	// 	    acc.set('Status__c', status);
-		 
-	// 	    org.update({ sobject: acc }, function(err, resp){
-	// 	      if(!err){
-	// 	      	  res.status(200)
-	// 		      res.send({"message":"Update was done","Success":true,"response":resp,"update":"DOne"})
-	// 	      } else{
-	//   			res.status(500)
-	//   			res.send({"message":"Some thing went wrong","error":err})
-
-	// 	      }
-	// 	    });
-		 
-	// 	  }
-	// 	});
+		// the oauth object was stored in the connection object
+		// if(!err && resp.records) {
+			if(!err) {
+			var acc = nforce.createSObject('Candidate_Assesment__c');	
+			acc.set("Blitz_Attendees__c", reqObj.blitzId);
+			acc.set("Capability_Panelist__c", reqObj.panelistId);
+			acc.set("Round__c", reqObj.roundNum);
+			acc.set("Desired_Position__c", reqObj.desiredPos);
+			acc.set("Relevant_Months_of_Exp__c", reqObj.relMonthsExp);
+			acc.set("Service_Skills__c", reqObj.serviceSkills);
+			acc.set("Service_Comments__c", reqObj.serviceComments);
+			acc.set("Communication_Skills__c", reqObj.commSkills);
+			acc.set("Communication_Comments__c", reqObj.commcommnets);
+			acc.set("Technical_Skills__c", reqObj.techSkills);
+			acc.set("Technical_Skills_Comments__c", reqObj.techSkillsComments);
+			acc.set("Leadership_Skills_Evaluation__c", reqObj.leadSkillsEval);
+			acc.set("Management_Skills__c", reqObj.managementSkills);
+			acc.set("Management_Comments__c", reqObj.managementComments);
+			acc.set("Interview_Recommendation__c", reqObj.interviewRecom);
+			acc.set("Overall_Comments__c", reqObj.overallComments);
+		
+	  
+			org.insert({ sobject: acc }, function(error, resp) {
+				if(!error){
+					console.log('Assesment Submitted!');
+					res.status(200)
+			    res.send({"message":"Assesment Submitted","Success":true,"response":resp})
+				} else {
+					console.log('Assesment submittion failed: ',error);
+				}
+			});
+		}
 
 	})
 }

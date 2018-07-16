@@ -21,6 +21,7 @@ app.get('/api/blitz/plandetails/:blitzPlanId',panelLoginService.checkBlitzPlanDe
 app.post('/api/blitz/personal/update/status',panelLoginService.updateBlitzPlanDetails);
 app.get('/api/blitz/candidates',panelLoginService.getAssignedCandidates);
 app.get('/api/blitz/feedback',panelLoginService.getPrevRoundFeedback);
+app.post('/api/blitz/submitassesment',panelLoginService.submitAssesment);
 
 
 app.get('/api/sf/callback',function(req,res){
