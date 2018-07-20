@@ -190,7 +190,7 @@ module.exports.getAssignedCandidates= function(req,res){
 	  			res.status(500)
 	  			res.send({"message":"Some thing went wrong","error":err})
 	  		}else{
-				//   console.log('res for assigned cand: ' ,resp.records[0]._fields.candidate__r);
+				  // console.log('res for assigned cand: ' ,resp);
 				  res.status(200)
 				  const responseData = resp.records;
 				  let cadidatesListArr = [];
@@ -422,6 +422,7 @@ module.exports.submitAssesment= function(req,res){
 			    res.send({"message":"Assesment Submitted","Success":true,"response":resp})
 				} else {
 					console.log('Assesment submittion failed: ',error);
+					res.send({"message": "Assesment submittion failed","Error": error})
 				}
 			});
 		}
