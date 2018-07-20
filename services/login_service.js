@@ -398,6 +398,7 @@ module.exports.submitAssesment= function(req,res){
 			if(!err) {
 			var acc = nforce.createSObject('Candidate_Assesment__c');	
 			acc.set("Blitz_Attendees__c", reqObj.blitzId);
+			acc.set("Candidate__c", reqObj.candidateId);
 			acc.set("Capability_Panelist__c", reqObj.panelistId);
 			acc.set("Round__c", reqObj.roundNum);
 			acc.set("Desired_Position__c", reqObj.desiredPos);
