@@ -200,8 +200,8 @@ module.exports.getAssignedCandidates= function(req,res){
 						  "blitzUrl": candidateItem.attributes.url,
 						  "changedState": candidateItem._changed,
 						  "PreviousState": candidateItem._previous,
-						  "candidateId": candidateItem._fields.id,
-						  "candidateType": candidateItem._fields.candidate__r.attributes.type,
+							"candidateId": candidateItem._fields.id,
+							"candidateType": candidateItem._fields.candidate__r.attributes.type,
 						  "candidateUrl": candidateItem._fields.candidate__r.attributes.url,
 						  "candidateFirstName": candidateItem._fields.candidate__r.First_Name__c,
 						  "candidateLastName": candidateItem._fields.candidate__r.Last_Name__c,
@@ -211,7 +211,7 @@ module.exports.getAssignedCandidates= function(req,res){
 						  "candidateSource": candidateItem._fields.candidate__r.Source__c,
 						  "candidateBlitzDate": candidateItem._fields.candidate__r.Blitz_Date__c,
 						  "candidateVersantStatus": candidateItem._fields.versant_status__c,
-						  "candidateId": candidateItem._fields.stage__c
+						  "roundNum": candidateItem._fields.stage__c
 					  };
 					cadidatesListArr.push(candidateDetail);
 				  });
@@ -375,6 +375,7 @@ module.exports.submitAssesment= function(req,res){
 	// Test payload object for post submitAssesment API
 	// {
 	// 	"blitzId": "a071F000000UHTyQAO",
+	//  "candidateId": "",
 	// 	"panelistId": "a0H1F000001Y7vQUAS",
 	// 	"roundNum": "Round 1",
 	// 	"desiredPos": "BTA",
