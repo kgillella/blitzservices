@@ -184,7 +184,7 @@ module.exports.getAssignedCandidates= function(req,res){
 	//   console.log('blitzPlanId: ' ,blitzPlanId);
 	//   console.log('panelistId: ' ,panelistId);
 		  // var q = "Select Id,  Name, Blitz_Planned_Date__c, Blitz_Location__c, Service_Line__c, Service_Line_Capability__c, Blitz_Panelist_Location__c, Telephonic_Locations__c from Blitz_Plan__c where Id   = '"+blitzPlanId+"'";
-		const q = "Select Id, Candidate__r.First_Name__c, Candidate__r.Last_Name__c, Candidate__r.Phone__c, Candidate__r.Email__c , Candidate__r.Capability__c, Candidate__r.Source__c, Versant_Status__c, Stage__c, Candidate__r.Blitz_Date__c from Blitz_Attendees__c where Blitz_Plan__c ='"+blitzPlanId+"' AND ((Status__c ='Candidate Arrived' AND Capability_Panelist_Round_1__c ='"+panelistId+"') OR (Status__c ='Technical Interview-I completed' AND Capability_Panelist_Round_2__c ='"+panelistId+"') OR (Status__c ='Technical Interview-II completed' AND Capability_Panelists_Round_3__c ='"+panelistId+"')) ORDER BY Lastmodifieddate DESC LIMIT 1";  
+		const q = "Select Id, Candidate__r.First_Name__c, Candidate__r.Last_Name__c, Candidate__r.Phone__c, Candidate__r.Email__c , Candidate__r.Capability__c, Candidate__r.Source__c, Versant_Status__c, Round_Value__c, Candidate__r.Blitz_Date__c from Blitz_Attendees__c where Blitz_Plan__c ='"+blitzPlanId+"' AND ((Status__c ='Candidate Arrived' AND Capability_Panelist_Round_1__c ='"+panelistId+"') OR (Status__c ='Technical Interview-I completed' AND Capability_Panelist_Round_2__c ='"+panelistId+"') OR (Status__c ='Technical Interview-II completed' AND Capability_Panelists_Round_3__c ='"+panelistId+"')) ORDER BY Lastmodifieddate DESC LIMIT 1";  
 	  	return org.query({ query: q }, function(err, resp){
 	  		if(err){
 	  			res.status(500)
@@ -211,7 +211,7 @@ module.exports.getAssignedCandidates= function(req,res){
 						  "candidateSource": candidateItem._fields.candidate__r.Source__c,
 						  "candidateBlitzDate": candidateItem._fields.candidate__r.Blitz_Date__c,
 						  "candidateVersantStatus": candidateItem._fields.versant_status__c,
-						  "roundNum": candidateItem._fields.stage__c
+						  "roundNum": candidateItem._fields.round_value__c
 					  };
 					cadidatesListArr.push(candidateDetail);
 				  });
