@@ -200,7 +200,7 @@ module.exports.getAssignedCandidates= function(req,res){
 						  "blitzUrl": candidateItem.attributes.url,
 						  "changedState": candidateItem._changed,
 						  "PreviousState": candidateItem._previous,
-							"blitzAtendeeId": candidateItem._fields.id,
+							"blitzAttendeeId": candidateItem._fields.id,
 							"candidateId": candidateItem._fields.candidate__c,
 							"candidateType": candidateItem._fields.candidate__r.attributes.type,
 						  "candidateUrl": candidateItem._fields.candidate__r.attributes.url,
